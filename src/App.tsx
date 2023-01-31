@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import MyButton from "./components/props-sample/MyButton"; // default keyword ile gelen import
@@ -9,13 +9,21 @@ import MyButton2 from "./components/props-sample/MyButton"; // as keyword alias
 import * as MyLabel3 from "./components/props-sample/MyLabel"; // lodash ve moment kütüphanelerinde görebiliriz
 
 import * as MyButton4 from "./components/props-sample/MyButton";
+import { UserClassComponent } from "./components/class-fc-sample/UserClassComponent";
 // içindeki tüm dosyalara erşiebildiğinden . ile alt export dosyasına erişiriz. dosya referansı
 
 // default keyword kullanılmayan import
 
 // default isim ile tanımlanmış olan dosyalar direk bizim component ismimiz ile çağrılır
 // Ctrl + J
+
+type SwitchState = {
+  IsOpen: boolean;
+};
+
 function App() {
+  const [Switch, setSwitch] = useState<SwitchState>({ IsOpen: false }); // init value
+
   return (
     <div className="App">
       <header className="App-header">
@@ -23,16 +31,19 @@ function App() {
         {/* props değerleri ile component özelleştirilir. props değerlerini uygulama çalışma zamanından önce verdiğimiz default değerler. */}
         {/* propslar sabit stateless değerlerimizdir. */}
         {/* 1. örnek props kullanımı */}
-        <MyButton title="button 1" />
+        {/* <MyButton title="button 1" />
         <MyButton title="button 2" color="red" />
         <MyLabel text="label" />
         <MyLabel text="label 2" />
         <MyLabelItem />
         <MyButton2 title="sdsad" />
         <MyLabel3.MyLabel text="dsds" />
-        <MyButton4.default title="deneme1" />
-
+        <MyButton4.default title="deneme1" /> */}
         {/* useeffect usestate kullanımı */}
+        <button onClick={() => setSwitch({ IsOpen: !Switch.IsOpen })}>
+          Toggle Durum {Switch.IsOpen ? "açık" : "kapalı"}
+        </button>
+        {Switch.IsOpen && <UserClassComponent />}
       </header>
     </div>
   );
