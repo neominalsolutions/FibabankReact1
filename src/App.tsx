@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import MyButton from "./components/props-sample/MyButton"; // default keyword ile gelen import
@@ -24,6 +24,50 @@ type SwitchState = {
 function App() {
   const [Switch, setSwitch] = useState<SwitchState>({ IsOpen: false }); // init value
 
+  const [counter, setcounter] = useState<number>(0);
+
+  // Her bir api call işlemini birbirinden izole yöntemek için birden fazla otomatik tetiklenir yapı olan useEffect kullanabilirim.
+
+  // user profile fill
+  // class component deki componentDidMount,componentDidUpdate,componentWillUnmount
+  useEffect(() => {
+    console.log("init with no deps");
+
+    return () => {
+      // clean up operations
+      console.log("destroy clean up");
+    };
+  });
+  // state ne olursa olsun her state değişiminde çalışır. peformansını olumsuz etkiler dikkatli kullanalım
+
+  // user list dropdown fill
+  useEffect(() => {
+    console.log("init with counter state deps");
+
+    return () => {
+      console.log("switch state deps clean up");
+    };
+  }, [counter]); // counter state değişimi takip etsin
+  // useEffect switch state takip etsin eğerli state bir değişiklik olursa bu kod değişimi yakalısın. [state1,state2,state3] bu şekilde kullanımda state1 yada state2 yada state3 değişiminde tetiklensin.
+
+  // user table fill
+  useEffect(() => {
+    console.log("init empty array deps");
+
+    return () => {
+      console.log("clean up init empty deps");
+    };
+  }, []);
+  // boş array dependency yöntemi tek sefere çalışacak kod.
+  // OneCall UseEffect sadece 1 kereye mahsus component doma init olurken çalışır.
+  // bir kereye mahsus bir veri çekilecek ise kullanılır.
+
+  // function component içerisinde genelde arrow function
+  const off = () => {
+    setSwitch({ IsOpen: false });
+    // bind yok this keyword yok.
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -43,7 +87,9 @@ function App() {
         <button onClick={() => setSwitch({ IsOpen: !Switch.IsOpen })}>
           Toggle Durum {Switch.IsOpen ? "açık" : "kapalı"}
         </button>
+        <button onClick={off}> Off State </button>
         {Switch.IsOpen && <UserClassComponent />}
+        <button onClick={() => setcounter(counter + 1)}>Set Counter</button>
       </header>
     </div>
   );
